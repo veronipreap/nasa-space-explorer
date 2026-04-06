@@ -106,7 +106,7 @@ async function fetchAndRenderImages() {
 		return;
 	}
 
-	renderMessage('Loading images from NASA...', true);
+	renderMessage('Loading media from NASA...', true);
 	getImagesButton.disabled = true;
 	getImagesButton.textContent = 'Loading...';
 
@@ -151,7 +151,7 @@ async function fetchAndRenderImages() {
 		renderMessage('Something went wrong while fetching space images. Please try again.');
 	} finally {
 		getImagesButton.disabled = false;
-		getImagesButton.textContent = 'Get Space Images';
+		getImagesButton.textContent = 'Get Space Media';
 		activeRequestController = null;
 	}
 }
