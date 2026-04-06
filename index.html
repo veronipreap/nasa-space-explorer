@@ -19,6 +19,16 @@
     <div class="filters">
       <input type="date" id="startDate" />
       <input type="date" id="endDate" />
+      <div class="media-filters" aria-label="Media type filters">
+        <label for="imageOnly">
+          <input type="checkbox" id="imageOnly" checked />
+          Images
+        </label>
+        <label for="videoOnly">
+          <input type="checkbox" id="videoOnly" checked />
+          Videos
+        </label>
+      </div>
       <button>Get Space Images</button>
     </div>
 
@@ -35,6 +45,8 @@
         <button id="closeModalBtn" class="modal-close" aria-label="Close modal">&times;</button>
         <p id="modalLoading" class="modal-loading hidden">Loading space image...</p>
         <img id="modalImage" src="" alt="" class="modal-image" />
+        <iframe id="modalVideo" class="modal-video" title="NASA APOD video" allowfullscreen></iframe>
+        <a id="modalVideoLink" class="modal-video-link hidden" href="#" target="_blank" rel="noopener noreferrer">Watch video in a new tab</a>
         <h2 id="modalTitle"></h2>
         <p id="modalDate" class="modal-date"></p>
         <p id="modalExplanation" class="modal-explanation"></p>
