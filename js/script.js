@@ -11,7 +11,6 @@ const imageModal = document.getElementById('imageModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const modalImage = document.getElementById('modalImage');
 const modalVideo = document.getElementById('modalVideo');
-const modalVideoLink = document.getElementById('modalVideoLink');
 const modalLoading = document.getElementById('modalLoading');
 const modalTitle = document.getElementById('modalTitle');
 const modalDate = document.getElementById('modalDate');
@@ -123,7 +122,7 @@ async function fetchAndRenderImages() {
 		});
 
 		if (!response.ok) {
-			throw new Error('Unable to load NASA images right now.');
+			throw new Error('Unable to load NASA media right now.');
 		}
 
 		const data = await response.json();
@@ -148,7 +147,7 @@ async function fetchAndRenderImages() {
 			return;
 		}
 
-		renderMessage('Something went wrong while fetching space images. Please try again.');
+		renderMessage('Something went wrong while fetching space media. Please try again.');
 	} finally {
 		getImagesButton.disabled = false;
 		getImagesButton.textContent = 'Get Space Media';
@@ -193,7 +192,6 @@ function openModal(item) {
 	modalImage.style.display = 'none';
 	modalVideo.style.display = 'none';
 	modalVideo.src = '';
-	modalVideoLink.classList.add('hidden');
 
 	if (isVideo) {
 		modalLoading.textContent = 'Loading space video...';
@@ -206,14 +204,12 @@ function openModal(item) {
 			modalLoading.classList.remove('is-loading');
 			modalLoading.classList.add('hidden');
 		} else {
-			modalLoading.textContent = 'This video cannot be embedded here. Use the link below to watch it.';
+			modalLoading.textContent = 'This video cannot be embedded here.';
 			modalLoading.classList.remove('is-loading');
-			modalVideoLink.href = item.url;
-			modalVideoLink.classList.remove('hidden');
 		}
 	} else {
 		// Show a short loading message until the image is fully ready.
-		modalLoading.textContent = 'Loading space image...';
+		modalLoading.textContent = 'Loading space media...';
 		modalLoading.classList.add('is-loading');
 		modalLoading.classList.remove('hidden');
 
@@ -251,7 +247,6 @@ function closeModal() {
 	modalImage.src = '';
 	modalVideo.style.display = 'none';
 	modalVideo.src = '';
-	modalVideoLink.classList.add('hidden');
 }
 
 function getVideoEmbedUrl(videoUrl) {

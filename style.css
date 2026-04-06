@@ -131,12 +131,19 @@ button:hover {
   .filters {
     flex-direction: row;
     align-items: center;
-    padding: 0;
+    flex-wrap: wrap;
+    padding: 0 20px;
   }
   
   input[type="date"],
+  .media-filters,
   button {
+    flex: 1 1 180px;
     width: auto;
+  }
+
+  button {
+    max-width: 220px;
   }
 }
 
@@ -152,7 +159,7 @@ button:hover {
 /* Gallery items */
 .gallery-item {
   flex: 1 1 100%;  /* full width by default */
-  min-width: 280px;
+  min-width: 0;
   max-width: 500px;
   background: var(--nasa-spacesuit-white);
   padding: 10px;
@@ -307,19 +314,34 @@ button:hover {
 
 .modal-video {
   width: 100%;
-  min-height: 360px;
+  min-height: clamp(220px, 45vh, 360px);
   border: 0;
   border-radius: 6px;
   margin-bottom: 15px;
   background: #000;
 }
 
-.modal-video-link {
-  display: inline-block;
-  margin: 0 0 14px;
-  color: var(--nasa-action-blue-dark);
-  font-weight: 700;
-  text-decoration: underline;
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .media-filters {
+    flex-wrap: wrap;
+  }
+
+  .gallery {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
 }
 
 .modal-loading {

@@ -14,7 +14,7 @@ function setupDateInputs(startInput, endInput) {
   endInput.min = earliestDate;
   endInput.max = today;
 
-  // Default: Show the most recent 9 days of space images
+  // Default: Show the most recent 9 days of space media
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 8); // minus 8 because it includes today
   startInput.value = lastWeek.toISOString().split('T')[0];
