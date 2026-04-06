@@ -11,6 +11,7 @@ const imageModal = document.getElementById('imageModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const modalImage = document.getElementById('modalImage');
 const modalVideo = document.getElementById('modalVideo');
+const modalNativeVideo = document.getElementById('modalNativeVideo');
 const modalLoading = document.getElementById('modalLoading');
 const modalTitle = document.getElementById('modalTitle');
 const modalDate = document.getElementById('modalDate');
@@ -19,7 +20,7 @@ const modalExplanation = document.getElementById('modalExplanation');
 // NASA APOD API endpoint and key
 const nasaApiUrl = 'https://api.nasa.gov/planetary/apod';
 const nasaApiKey = 'kp3QJEdsQmxmHUVcQacPVk1BmpaanwNZfockuXfd';
-const maxDaysPerRequest = 12;
+const maxDaysPerRequest = 30;
 
 // Store APOD entries so we can open details in the modal later
 let galleryItems = [];
@@ -81,7 +82,7 @@ async function fetchAndRenderImages() {
 
 	const selectedDays = getDayDifference(startDate, endDate) + 1;
 	if (selectedDays > maxDaysPerRequest) {
-		renderMessage(`Please choose ${maxDaysPerRequest} days or fewer for faster loading.`);
+		renderMessage(`Please choose ${maxDaysPerRequest} days or fewer per search.`);
 		return;
 	}
 
@@ -188,10 +189,14 @@ function renderMessage(message, isLoading = false) {
 function openModal(item) {
 	const isVideo = item.media_type === 'video';
 	const videoEmbedUrl = isVideo ? getVideoEmbedUrl(item.url) : '';
+	const isDirectVideo = isVideo ? isDirectVideoUrl(item.url) : false;
 
 	modalImage.style.display = 'none';
 	modalVideo.style.display = 'none';
 	modalVideo.src = '';
+	modalNativeVideo.style.display = 'none';
+	modalNativeVideo.pause();
+	modalNativeVideo.src = '';
 
 	if (isVideo) {
 		modalLoading.textContent = 'Loading space video...';
@@ -203,6 +208,21 @@ function openModal(item) {
 			modalVideo.style.display = 'block';
 			modalLoading.classList.remove('is-loading');
 			modalLoading.classList.add('hidden');
+		} else if (isDirectVideo) {
+			modalNativeVideo.onloadeddata = () => {
+				modalLoading.classList.remove('is-loading');
+				modalLoading.classList.add('hidden');
+				modalNativeVideo.style.display = 'block';
+			};
+
+			modalNativeVideo.onerror = () => {
+				modalLoading.textContent = 'This video could not be loaded in the modal.';
+				modalLoading.classList.remove('is-loading');
+				modalNativeVideo.style.display = 'none';
+			};
+
+			modalNativeVideo.src = item.url;
+			modalNativeVideo.load();
 		} else {
 			modalLoading.textContent = 'This video cannot be embedded here.';
 			modalLoading.classList.remove('is-loading');
@@ -247,6 +267,9 @@ function closeModal() {
 	modalImage.src = '';
 	modalVideo.style.display = 'none';
 	modalVideo.src = '';
+	modalNativeVideo.style.display = 'none';
+	modalNativeVideo.pause();
+	modalNativeVideo.src = '';
 }
 
 function getVideoEmbedUrl(videoUrl) {
@@ -276,6 +299,14 @@ function getVideoEmbedUrl(videoUrl) {
 	}
 
 	return '';
+}
+
+function isDirectVideoUrl(videoUrl) {
+	if (!videoUrl) {
+		return false;
+	}
+
+	return /\.(mp4|webm|ogg)(\?|#|$)/i.test(videoUrl);
 }
 
 function formatDate(dateString) {

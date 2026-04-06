@@ -31,6 +31,7 @@
       </div>
       <button>Get Space Media</button>
     </div>
+    <p class="search-limit-note">Search limit: up to 30 days per request.</p>
 
     <div id="gallery" class="gallery">
       <div class="placeholder">
@@ -46,6 +47,7 @@
         <p id="modalLoading" class="modal-loading hidden">Loading space media...</p>
         <img id="modalImage" src="" alt="" class="modal-image" />
         <iframe id="modalVideo" class="modal-video" title="NASA APOD video" allowfullscreen></iframe>
+        <video id="modalNativeVideo" class="modal-video" controls playsinline preload="metadata"></video>
         <h2 id="modalTitle"></h2>
         <p id="modalDate" class="modal-date"></p>
         <p id="modalExplanation" class="modal-explanation"></p>

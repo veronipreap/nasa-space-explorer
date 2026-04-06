@@ -73,8 +73,14 @@ h1 {
   flex-direction: column;
   gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   padding: 0 20px;
+}
+
+.search-limit-note {
+  margin: 0 20px 16px;
+  font-size: 14px;
+  color: var(--nasa-muted);
 }
 
 .media-filters {
