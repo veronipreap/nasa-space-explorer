@@ -16,11 +16,22 @@ const modalLoading = document.getElementById('modalLoading');
 const modalTitle = document.getElementById('modalTitle');
 const modalDate = document.getElementById('modalDate');
 const modalExplanation = document.getElementById('modalExplanation');
+const spaceFactText = document.getElementById('spaceFactText');
 
 // NASA APOD API endpoint and key
 const nasaApiUrl = 'https://api.nasa.gov/planetary/apod';
 const nasaApiKey = 'kp3QJEdsQmxmHUVcQacPVk1BmpaanwNZfockuXfd';
 const maxDaysPerRequest = 30;
+const spaceFacts = [
+	'The Sun contains more than 99.8% of all the mass in our solar system.',
+	'A day on Venus is longer than a year on Venus.',
+	'Neutron stars are so dense that a sugar-cube-sized amount would weigh about a billion tons on Earth.',
+	'Jupiter has at least 95 moons, and that number can still change as new ones are discovered.',
+	'Light from the Sun takes about 8 minutes and 20 seconds to reach Earth.',
+	'Mars has the tallest volcano in the solar system, Olympus Mons.',
+	'Space is completely silent because there is no air for sound to travel through.',
+	'If you could drive a car straight up from Earth, you would pass through the Karman line, the start of space, in just a few minutes.'
+];
 
 // Store APOD entries so we can open details in the modal later
 let galleryItems = [];
@@ -32,6 +43,7 @@ let activeRequestController = null;
 // - Default to a range of 9 days (from 9 days ago to today)
 // - Restrict dates to NASA's image archive (starting from 1995)
 setupDateInputs(startInput, endInput);
+renderRandomSpaceFact();
 
 // Listen for button clicks and fetch images for the selected dates
 getImagesButton.addEventListener('click', async () => {
@@ -341,4 +353,13 @@ function getSelectedMediaTypes() {
 
 function filterByMediaType(entries, selectedTypes) {
 	return entries.filter((entry) => selectedTypes.includes(entry.media_type));
+}
+
+function renderRandomSpaceFact() {
+	if (!spaceFactText) {
+		return;
+	}
+
+	const randomIndex = Math.floor(Math.random() * spaceFacts.length);
+	spaceFactText.textContent = spaceFacts[randomIndex];
 }

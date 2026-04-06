@@ -83,6 +83,32 @@ h1 {
   color: var(--nasa-muted);
 }
 
+.space-fact {
+  margin: 0 20px 20px;
+  padding: 16px 18px;
+  border: 1px solid rgba(28, 103, 227, 0.18);
+  border-left: 5px solid var(--nasa-action-blue);
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(28, 103, 227, 0.08), rgba(246, 65, 55, 0.05)),
+    #fff;
+}
+
+.space-fact-kicker {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nasa-action-blue-dark);
+}
+
+.space-fact-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--nasa-ink);
+}
+
 .media-filters {
   display: flex;
   align-items: center;
@@ -202,6 +228,12 @@ button:hover {
   height: 200px;
   object-fit: cover;
   border-radius: 4px;
+  transition: transform 0.35s ease;
+}
+
+.gallery-item:hover img,
+.gallery-item:focus img {
+  transform: scale(1.04);
 }
 
 .gallery-item-video {
@@ -330,6 +362,11 @@ button:hover {
 @media (max-width: 480px) {
   body {
     padding: 12px;
+  }
+
+  .space-fact {
+    margin: 0 12px 16px;
+    padding: 14px 16px;
   }
 
   .media-filters {
