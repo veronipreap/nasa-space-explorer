@@ -46,9 +46,7 @@ setupDateInputs(startInput, endInput);
 renderRandomSpaceFact();
 
 // Listen for button clicks and fetch images for the selected dates
-getImagesButton.addEventListener('click', async () => {
-	await fetchAndRenderImages();
-});
+getImagesButton.addEventListener('click', fetchAndRenderImages);
 
 // Open modal when a gallery card is clicked
 gallery.addEventListener('click', (event) => {
@@ -172,7 +170,7 @@ function renderGallery(items) {
 	const galleryMarkup = items
 		.map((item, index) => {
 			const isVideo = item.media_type === 'video';
-			const previewImage = isVideo ? (item.thumbnail_url || 'img/nasa-worm-logo.png') : item.url;
+			const previewImage = isVideo ? item.thumbnail_url || 'img/nasa-worm-logo.png' : item.url;
 			const mediaLabel = isVideo ? 'Video' : 'Image';
 
 			return `
@@ -200,8 +198,6 @@ function renderMessage(message, isLoading = false) {
 
 function openModal(item) {
 	const isVideo = item.media_type === 'video';
-	const videoEmbedUrl = isVideo ? getVideoEmbedUrl(item.url) : '';
-	const isDirectVideo = isVideo ? isDirectVideoUrl(item.url) : false;
 
 	modalImage.style.display = 'none';
 	modalVideo.style.display = 'none';
@@ -211,6 +207,8 @@ function openModal(item) {
 	modalNativeVideo.src = '';
 
 	if (isVideo) {
+		const videoEmbedUrl = getVideoEmbedUrl(item.url);
+
 		modalLoading.textContent = 'Loading space video...';
 		modalLoading.classList.add('is-loading');
 		modalLoading.classList.remove('hidden');
@@ -220,7 +218,7 @@ function openModal(item) {
 			modalVideo.style.display = 'block';
 			modalLoading.classList.remove('is-loading');
 			modalLoading.classList.add('hidden');
-		} else if (isDirectVideo) {
+		} else if (isDirectVideoUrl(item.url)) {
 			modalNativeVideo.onloadeddata = () => {
 				modalLoading.classList.remove('is-loading');
 				modalLoading.classList.add('hidden');
