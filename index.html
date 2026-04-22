@@ -58,6 +58,27 @@
         <p id="modalExplanation" class="modal-explanation"></p>
       </div>
     </div>
+
+    <section class="chatbot" aria-label="Space helper chatbot">
+      <button id="chatToggleBtn" class="chatbot-toggle" type="button" aria-expanded="true" aria-controls="chatPanel">
+        Hide
+      </button>
+
+      <div id="chatPanel" class="chatbot-panel is-open" aria-hidden="false">
+        <div class="chatbot-header">
+          <h2>Space Helper</h2>
+        </div>
+
+        <div id="chatMessages" class="chatbot-messages" aria-live="polite">
+          <p class="chatbot-message chatbot-bot-message">Hi! I only answer NASA-related questions. Try: "What is APOD?"</p>
+        </div>
+
+        <form id="chatForm" class="chatbot-form">
+          <input id="chatInput" type="text" placeholder="Ask a space question..." maxlength="140" autocomplete="off" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </section>
   </div>
 
   <script src="js/dateRange.js"></script>

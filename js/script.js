@@ -17,6 +17,11 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDate = document.getElementById('modalDate');
 const modalExplanation = document.getElementById('modalExplanation');
 const spaceFactText = document.getElementById('spaceFactText');
+const chatToggleBtn = document.getElementById('chatToggleBtn');
+const chatPanel = document.getElementById('chatPanel');
+const chatMessages = document.getElementById('chatMessages');
+const chatForm = document.getElementById('chatForm');
+const chatInput = document.getElementById('chatInput');
 
 // NASA APOD API endpoint and key
 const nasaApiUrl = 'https://api.nasa.gov/planetary/apod';
@@ -37,6 +42,11 @@ const spaceFacts = [
 let galleryItems = [];
 const apodCache = new Map();
 let activeRequestController = null;
+const chatMinHeight = 180;
+const chatMaxHeight = 520;
+const chatHeightStep = 40;
+const chatResizeEdgeThreshold = 16;
+let isHoveringChatResizeEdge = false;
 
 // Call the setupDateInputs function from dateRange.js
 // This sets up the date pickers to:
@@ -80,6 +90,54 @@ document.addEventListener('keydown', (event) => {
 		closeModal();
 	}
 });
+
+// Chatbot toggle: open and close the small chat panel.
+if (chatToggleBtn && chatPanel && chatInput) {
+	setChatPanelState(chatPanel.classList.contains('is-open'));
+
+	chatToggleBtn.addEventListener('click', () => {
+		const isOpen = !chatPanel.classList.contains('is-open');
+		setChatPanelState(isOpen);
+	});
+}
+
+// Handle user messages and render a simple bot response.
+if (chatForm && chatInput && chatMessages) {
+	chatForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+
+		const userMessage = chatInput.value.trim();
+		if (!userMessage) {
+			return;
+		}
+
+		appendChatMessage(userMessage, 'user');
+		const botReply = getBotReply(userMessage);
+		appendChatMessage(botReply, 'bot');
+
+		chatInput.value = '';
+		chatInput.focus();
+	});
+}
+
+// Let users resize with the mouse wheel when hovering near the panel's bottom edge.
+if (chatPanel) {
+	chatPanel.addEventListener('mousemove', updateChatResizeZone);
+	chatPanel.addEventListener('mouseleave', () => {
+		isHoveringChatResizeEdge = false;
+		chatPanel.classList.remove('is-resize-zone');
+	});
+
+	chatPanel.addEventListener('wheel', (event) => {
+		if (!isHoveringChatResizeEdge) {
+			return;
+		}
+
+		event.preventDefault();
+		const resizeDirection = event.deltaY < 0 ? chatHeightStep : -chatHeightStep;
+		resizeChatPanel(resizeDirection);
+	}, { passive: false });
+}
 
 async function fetchAndRenderImages() {
 	const startDate = startInput.value;
@@ -360,4 +418,108 @@ function renderRandomSpaceFact() {
 
 	const randomIndex = Math.floor(Math.random() * spaceFacts.length);
 	spaceFactText.textContent = spaceFacts[randomIndex];
+}
+
+function appendChatMessage(message, sender) {
+	if (!chatMessages) {
+		return;
+	}
+
+	const messageElement = document.createElement('p');
+	messageElement.className = `chatbot-message ${sender === 'user' ? 'chatbot-user-message' : 'chatbot-bot-message'}`;
+	messageElement.textContent = message;
+	chatMessages.appendChild(messageElement);
+	chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function getBotReply(userText) {
+	const text = userText.toLowerCase();
+	const nasaKeywords = [
+		'nasa',
+		'apod',
+		'space',
+		'planet',
+		'mars',
+		'moon',
+		'sun',
+		'earth',
+		'galaxy',
+		'star',
+		'astronaut',
+		'rocket',
+		'telescope',
+		'mission',
+		'launch',
+		'nebula',
+		'video',
+		'image',
+		'photo',
+		'date',
+		'media'
+	];
+
+	const isNasaRelated = nasaKeywords.some((keyword) => text.includes(keyword));
+
+	if (!isNasaRelated) {
+		return 'I can only answer NASA-related questions and comments.';
+	}
+
+	if (text.includes('apod')) {
+		return 'APOD means Astronomy Picture of the Day. NASA shares one space image or video each day with a short explanation.';
+	}
+
+	if (text.includes('use') || text.includes('how') || text.includes('start')) {
+		return 'Choose a start and end date, select images and/or videos, then click Get Space Media.';
+	}
+
+	if (text.includes('video')) {
+		return 'This site can show NASA videos too. Keep the Videos filter checked before searching.';
+	}
+
+	if (text.includes('image') || text.includes('photo')) {
+		return 'For photos only, keep Images checked and uncheck Videos before you search.';
+	}
+
+	if (text.includes('hello') || text.includes('hi')) {
+		return 'Hello explorer. Ask me any NASA question about APOD, missions, images, or videos.';
+	}
+
+	return 'That sounds NASA-related. Try asking about APOD, NASA missions, or using the date filters for media.';
+}
+
+function setChatPanelState(isOpen) {
+	if (!chatPanel || !chatToggleBtn || !chatInput) {
+		return;
+	}
+
+	chatPanel.classList.toggle('is-open', isOpen);
+	chatToggleBtn.setAttribute('aria-expanded', String(isOpen));
+	chatPanel.setAttribute('aria-hidden', String(!isOpen));
+	chatToggleBtn.textContent = isOpen ? 'Hide' : 'Chat';
+
+	if (isOpen) {
+		chatInput.focus();
+	}
+}
+
+function resizeChatPanel(heightChange) {
+	if (!chatPanel) {
+		return;
+	}
+
+	const panelStyles = window.getComputedStyle(chatPanel);
+	const currentHeight = Number.parseFloat(panelStyles.height);
+	const nextHeight = Math.min(chatMaxHeight, Math.max(chatMinHeight, currentHeight + heightChange));
+	chatPanel.style.height = `${nextHeight}px`;
+}
+
+function updateChatResizeZone(event) {
+	if (!chatPanel) {
+		return;
+	}
+
+	const panelRect = chatPanel.getBoundingClientRect();
+	const distanceFromBottom = panelRect.bottom - event.clientY;
+	isHoveringChatResizeEdge = distanceFromBottom >= 0 && distanceFromBottom <= chatResizeEdgeThreshold;
+	chatPanel.classList.toggle('is-resize-zone', isHoveringChatResizeEdge);
 }

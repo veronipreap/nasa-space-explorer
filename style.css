@@ -405,3 +405,121 @@ button:hover {
   line-height: 1.6;
   color: var(--nasa-ink);
 }
+
+.chatbot {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1100;
+}
+
+.chatbot-toggle {
+  min-width: 92px;
+  border: 1px solid var(--nasa-action-blue-dark);
+  border-radius: 999px;
+  background: var(--nasa-action-blue);
+  color: var(--nasa-spacesuit-white);
+  box-shadow: 0 8px 18px rgba(11, 61, 145, 0.28);
+}
+
+.chatbot-toggle:hover {
+  background: var(--nasa-action-blue-dark);
+  border-color: var(--nasa-action-blue-dark);
+}
+
+.chatbot-panel {
+  width: min(320px, calc(100vw - 24px));
+  height: 220px;
+  margin-top: 10px;
+  border: 1px solid var(--nasa-border);
+  border-radius: 12px;
+  background: var(--nasa-spacesuit-white);
+  box-shadow: 0 14px 26px rgba(23, 23, 27, 0.18);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chatbot-panel.is-open {
+  display: flex;
+}
+
+.chatbot-header {
+  padding: 12px 14px;
+  background: var(--nasa-carbon-black);
+  color: var(--nasa-spacesuit-white);
+}
+
+.chatbot-header h2 {
+  font-size: 15px;
+  font-family: "Inter", sans-serif;
+}
+
+.chatbot-panel.is-resize-zone {
+  cursor: ns-resize;
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(28, 103, 227, 0.08), transparent 35%),
+    #fafbfe;
+}
+
+.chatbot-message {
+  max-width: 90%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.chatbot-bot-message {
+  align-self: flex-start;
+  border: 1px solid rgba(28, 103, 227, 0.2);
+  background: rgba(28, 103, 227, 0.08);
+}
+
+.chatbot-user-message {
+  align-self: flex-end;
+  border: 1px solid rgba(246, 65, 55, 0.25);
+  background: rgba(246, 65, 55, 0.12);
+}
+
+.chatbot-form {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--nasa-border);
+  background: #fff;
+}
+
+.chatbot-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--nasa-border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.chatbot-form button {
+  width: auto;
+  min-width: 70px;
+  padding: 10px 12px;
+}
+
+@media (max-width: 480px) {
+  .chatbot {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .chatbot-panel {
+    height: 210px;
+  }
+}
